@@ -1,6 +1,14 @@
 import React from 'react';
-
+import {styled} from '@stitches/react';
 function Rules(){
+
+    const div = styled('div',{
+        '.rulesContainer': {
+            
+        }
+    })
+
+
     return (
     <div className="rulesContainer">
         <h2>Rules:</h2>
