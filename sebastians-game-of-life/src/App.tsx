@@ -12,10 +12,9 @@ import {
 function App() {
   return (
     <>
-      {/* <Rules/> */}
       <Router>
         <Switch>
-          <Route path="/home">
+          <Route exact path="/">
             <LandingPage />
           </Route>
           <Route path="/rules">
