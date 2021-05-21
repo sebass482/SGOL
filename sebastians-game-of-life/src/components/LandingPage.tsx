@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@stitches/react';
 import CGOLGIF from '../assets/CGOL.gif';
-import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 function LandingPage() {

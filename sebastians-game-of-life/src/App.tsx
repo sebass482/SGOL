@@ -6,8 +6,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
+import Game from './components/Game';
 
 function App() {
   return (
@@ -19,6 +19,9 @@ function App() {
           </Route>
           <Route path="/rules">
             <Rules />
+          </Route>
+          <Route path="/game">
+            <Game/>
           </Route>
         </Switch>
       </Router>
