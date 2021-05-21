@@ -1,28 +1,43 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { styled } from '@stitches/react';
 import produce from 'immer';
 
 
-function Board(props:any){
+function Board(props: any) {
 
-    const numRows = 6;
-    const numCols = 6;
+    const numRows = 25;
+    const numCols = 25;
+    const operations = [
+        [0, 1],
+        [0, -1],
+        [1, -1],
+        [-1, 1],
+        [1, 1],
+        [-1, -1],
+        [1, 0],
+        [-1, 0]
+    ];
 
 
-    const StyledContainer = styled('div', {
-        width: 'cover',
+    const StyledGame = styled('div', {
         display: 'flex',
-        flexWrap: 'wrap',
-        color: 'green',
+        justifyContent: 'center',
+        alignItems: 'center'
     })
 
-    const StyledDiv = styled('div', {
-        display: 'flex',
-        flexDirection:'row',
-        width: '1rem',
-        height: '1rem',
-        padding: '3rem',
-        border: '2px solid black',
+
+    const StyledGrid = styled('div', {
+        display: 'grid',
+        gridTemplateColumns: `repeat(${numCols},20px)`,
+        padding: '20px',
+        placeItems: 'center',
+        backgroundColor: 'dodgerblue',
+    })
+
+    const StyledCell = styled('div', {
+        width: '20px',
+        height: '20px',
+        border: 'solid 2px black',
         margin: '1px',
         '&.dead': {
             backgroundColor: 'white',
@@ -31,36 +46,86 @@ function Board(props:any){
             backgroundColor: 'black',
         }
     })
-    const [grid,setGrid] = useState(() => {
+    const [grid, setGrid] = useState(() => {
         const rows = [];
-        for(let i = 0; i<numRows; i++){
-            rows.push(Array.from(Array(numCols),() => 0 ))
+        for (let i = 0; i < numRows; i++) {
+            rows.push(Array.from(Array(numCols), () => 0))
         }
         return rows
     })
 
 
+    const [running, setRunning] = useState(false)
+
+    const runRef = useRef(running);
+    runRef.current = running
+
+    const runSim = useCallback(() => {
+        if (!runRef.current) {
+            return
+        }
+        
+        setGrid(g => {
+            return produce(g, gridCopy => {
+                for (let i = 0; i < numRows; i++) {
+                    for (let j = 0; j < numCols; j++) {
+                        let neighbours = 0;
+                        operations.forEach(([x, y]) => {
+                            const newI = i + x
+                            const newJ = j + y
+                            if (newI >= 0 && newI < numRows && newJ >= 0 && newJ < numCols) {
+                                neighbours += g[newI][newJ]
+                            }
+                        })
+
+                            if (neighbours < 2 || neighbours > 3) {
+                                gridCopy[i][j] = 0
+                            } else if (g[i][j] === 0 && neighbours === 3) {
+                                gridCopy[i][j] = 1;
+                            }
+                        }
+                    }
+                })
+            })
+        
+        setTimeout(runSim, 100)
+    }, [])
+
+
     return (
-        <StyledContainer>
-          {
-                    grid.map((x,i) => (
-                        x.map((y,j) =>
+        <StyledGame>
+            <button onClick={() => {
+                setRunning(!running)
+                if (!running) {
+                    runRef.current = true
+                    runSim()
+                }
+            }}
+
+            >
+                {running ? 'stop' : 'start'}
+            </button>
+            <StyledGrid>
+                {
+                    grid.map((x, i) => (
+                        x.map((y, j) =>
                         (
-                            <StyledDiv
-                            onClick={() =>{
-                                const newGrid = produce(grid, gridCopy => {
-                                    gridCopy[i][j] = grid[i][j] ? 0 : 1 ;
-                                })
-                                setGrid((newGrid))
-                            }} 
-                            key={`${x}-${y}`}
-                            className={y === 0 ? 'dead' : 'alive'} />
+                            <StyledCell
+                                onClick={() => {
+                                    const newGrid = produce(grid, gridCopy => {
+                                        gridCopy[i][j] = grid[i][j] ? 0 : 1;
+                                    })
+                                    setGrid((newGrid))
+                                }}
+                                key={`${i}-${j}`}
+                                className={y === 0 ? 'dead' : 'alive'} />
                         )
                         )
                     ))
                 }
-        </StyledContainer>
-      );
+            </StyledGrid>
+        </StyledGame>
+    );
 }
 
 export default Board
