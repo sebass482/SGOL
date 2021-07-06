@@ -58,16 +58,6 @@ function Rules(){
           Each generation is a pure function of the preceding one. The rules
           continue to be applied repeatedly to create further generations.
         </p>
-        <p>Additional custom rules:</p>
-        <ul>
-          <li>
-            Random Mode: By toggling random mode to true, you disable to
-            infinite life capabilities of the game. A random number generator is
-            used to determine how the game will behave for the next generation.
-            There is a chance of an overwhelming amount of life, or overwhelming
-            amount of death.
-          </li>
-        </ul>
       </div>
     )
 }

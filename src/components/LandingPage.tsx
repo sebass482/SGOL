@@ -13,12 +13,20 @@ function LandingPage() {
     })
 
     const StyledText = styled('div', {
+        display:'flex',
+        flexDirection:'column',
+        opacity:'90%',
         position: 'absolute',
-        top: '50%',
+        top: '65%',
         left: '50%',
         transform: 'translate(-50%, -50%);',
         color: 'white',
-        fontSize: '1rem'
+        fontSize: '2rem'
+    })
+
+    const StyledButton = styled('button',{
+        margin:'20%',
+        alignItems: 'center'
     })
 
     const pushToGame = (event: React.MouseEvent) => {
@@ -31,8 +39,7 @@ function LandingPage() {
             <StyledImg src={CGOLGIF} />
             <StyledText>
                 Welcome to Sebastian's Game of Life!
-                <br></br>
-                <button onClick={pushToGame}> Play!</button>
+                <StyledButton onClick={pushToGame}> Play!</StyledButton>
             </StyledText>
         </>
     )

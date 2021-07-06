@@ -6,7 +6,7 @@ import produce from 'immer';
 function Board(props: any) {
 
     const numRows = 25;
-    const numCols = 25;
+    const numCols = 50;
     const operations = [
         [0, 1],
         [0, -1],
@@ -22,16 +22,17 @@ function Board(props: any) {
     const StyledGame = styled('div', {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection:'column'
     })
 
 
     const StyledGrid = styled('div', {
         display: 'grid',
         gridTemplateColumns: `repeat(${numCols},20px)`,
-        padding: '20px',
+        padding: '10px',
         placeItems: 'center',
-        backgroundColor: 'dodgerblue',
+        backgroundColor: 'black'
     })
 
     const StyledCell = styled('div', {
@@ -40,12 +41,27 @@ function Board(props: any) {
         border: 'solid 2px black',
         margin: '1px',
         '&.dead': {
-            backgroundColor: 'white',
+            backgroundColor: '#e5e5e5',
         },
         '&.alive': {
-            backgroundColor: 'black',
-        }
+            backgroundColor: '#238636',
+        },
+        '&:hover': {
+            transform: 'scale(1.4)',
+          },
     })
+
+    const StyledButtons = styled('div',{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding:'1%',
+    })
+
+    const Button = styled('button', {
+        backgroundColor: '#2e86f4',
+    })
+
     const [grid, setGrid] = useState(() => {
         const rows = [];
         for (let i = 0; i < numRows; i++) {
@@ -88,23 +104,23 @@ function Board(props: any) {
                 })
             })
         
-        setTimeout(runSim, 100)
+        setTimeout(runSim, 200)
     }, [])
 
 
     return (
         <StyledGame>
-            <button onClick={() => {
+            <Button onClick={() => {
                 setRunning(!running)
                 if (!running) {
                     runRef.current = true
                     runSim()
                 }
             }}
-
             >
                 {running ? 'stop' : 'start'}
-            </button>
+            </Button>
+        
             <StyledGrid>
                 {
                     grid.map((x, i) => (
@@ -124,6 +140,12 @@ function Board(props: any) {
                     ))
                 }
             </StyledGrid>
+
+            <StyledButtons>
+            <Button>Rules</Button>
+            <Button>Combinations</Button>
+            <Button>About Game of Life</Button>
+            </StyledButtons>
         </StyledGame>
     );
 }

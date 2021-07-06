@@ -17,9 +17,6 @@ function App() {
           <Route exact path="/">
             <LandingPage />
           </Route>
-          <Route path="/rules">
-            <Rules />
-          </Route>
           <Route path="/game">
             <Game/>
           </Route>
